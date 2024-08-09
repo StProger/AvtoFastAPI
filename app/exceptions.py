@@ -11,9 +11,16 @@ class AutoException(HTTPException):
         super().__init__(status_code=self.status_code, detail=self.detail)
 
 
+class CarNotFound(AutoException):
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Автомобиль не найден."
+
+
 class CarAlreadyExists(AutoException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Автомобиль уже существует."
+
 
 class InvalidCarNumber(AutoException):
     status_code = status.HTTP_400_BAD_REQUEST
