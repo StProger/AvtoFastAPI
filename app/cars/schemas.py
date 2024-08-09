@@ -8,3 +8,4 @@ class SCars(BaseModel):
 
     name: str
     number: str
+    color: str

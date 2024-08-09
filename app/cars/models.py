@@ -11,6 +11,7 @@ class Cars(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     number: Mapped[str] = mapped_column(nullable=False)
+    color: Mapped[str] = mapped_column(nullable=False)
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
 

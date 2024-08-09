@@ -50,4 +50,6 @@ class BaseDAO:
     async def update_(cls, model_id, **data):
         async with async_session_maker() as session:
 
-            query = update(cls.model).where(cls.model.c.id == model_id).values(**data)
+            query = update(cls.model).where(cls.model.id == model_id).values(**data)
+            await session.execute(query)
+            await session.commit()
