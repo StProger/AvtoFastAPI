@@ -11,6 +11,15 @@ class AutoException(HTTPException):
         super().__init__(status_code=self.status_code, detail=self.detail)
 
 
+class CarAlreadyExists(AutoException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Автомобиль уже существует."
+
+class InvalidCarNumber(AutoException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Неверный формат номера, пример: Т456КУ"
+
+
 class UserAlreadyExistsException(AutoException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Пользователь уже существует"

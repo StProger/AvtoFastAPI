@@ -15,19 +15,19 @@ router = APIRouter(prefix="/auth", tags=["Auth & Пользователи"])
 
 @router.post("/register")
 async def register_user(user_data: SUserRegister):
-    existing_user = await UsersDAO.find_one_or_none(email=user_data.email)
+    existing_user = await UsersDAO.find_one_or_none(login=user_data.login)
 
     if existing_user:
         raise UserAlreadyExistsException
 
     hashed_password = get_password_hash(user_data.password)
-    await UsersDAO.add(email=user_data.email, hashed_password=hashed_password)
+    await UsersDAO.add(login=user_data.login, hashed_password=hashed_password)
 
 
 @router.post("/login")
 async def login_user(user_data: SUserAuth, response: Response):
 
-    user = await authenticate_user(email=user_data.email, password=user_data.password)
+    user = await authenticate_user(login=user_data.login, password=user_data.password)
 
     if not user:
 
@@ -46,7 +46,7 @@ async def logout_user(response: Response):
     response.delete_cookie("access_token")
 
 
-@router.get("/me")
-async def read_user_me(user: Users = Depends(get_current_user)):
-
-    return user
+# @router.get("/me")
+# async def read_user_me(user: Users = Depends(get_current_user)):
+#
+#     return user

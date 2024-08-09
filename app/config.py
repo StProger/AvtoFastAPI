@@ -1,6 +1,12 @@
 from typing import Literal
 
+import os
+
+from dotenv import load_dotenv
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -8,19 +14,19 @@ class Settings(BaseSettings):
     MODE: Literal["DEV", "TEST", "PROD"]
     LOG_LEVEL: Literal["DEBUG", "INFO"]
 
-    DB_HOST: str
-    DB_PORT: int
-    DB_USER: str
-    DB_PASSWORD: str
-    DB_NAME: str
+    DB_HOST: str = os.getenv("DB_HOST")
+    DB_PORT: str = os.getenv("DB_PORT")
+    DB_USER: str = os.getenv("DB_USER")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD")
+    DB_NAME: str = os.getenv("DB_NAME")
 
-    SECRET_KEY: str
-    ALGORITHM: str
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
+    ALGORITHM: str = os.getenv("ALGORITHM")
 
-    REDIS_HOST: str
-    REDIS_PORT: str
+    REDIS_HOST: str = os.getenv("REDIS_HOST")
+    REDIS_PORT: str = os.getenv("REDIS_PORT")
 
-    model_config = SettingsConfigDict(env_file='../.env-non-dev')
+    model_config = SettingsConfigDict(env_file='../.env')
 
     @property
     def db_url(self):
