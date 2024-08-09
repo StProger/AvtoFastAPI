@@ -1,6 +1,12 @@
 from fastapi import APIRouter, Depends
 
+from fastapi_cache.decorator import cache
+
+from pydantic import parse_obj_as
+
 import re
+
+from asyncio import sleep
 
 from app.cars.schemas import SCars
 from app.cars.dao import CarsDAO
@@ -32,24 +38,34 @@ async def add_car(name: str,
 
 
 @router.get("", description="Получение всех машин")
-async def get_cars(user: Users = Depends(get_current_user)) -> list[SCars]:
+@cache(expire=15)
+async def get_cars(user: Users = Depends(get_current_user)):
 
+    await sleep(2)
     cars = await CarsDAO.find_all(user_id=user.id)
+    cars_json = parse_obj_as(list[SCars], cars)
     print(f"Получил все машины: {cars}")
 
-    return cars
+    return cars_json
 
 
 @router.get("/{car_id}", description="Получение автомобиля")
-async def get_car(car_id: int, user: Users = Depends(get_current_user)) -> SCars:
+@cache(expire=10)
+async def get_car(car_id: int, user: Users = Depends(get_current_user)):
 
+    await sleep(2)
     car = await CarsDAO.find_by_id(car_id)
     if not car:
         raise CarNotFound
     if car.user_id != user.id:
         raise CarNotFound
     print(f"Получил машину: {car}")
-    return car
+    car_json = parse_obj_as(SCars, {
+        "name": car.name,
+        "number": car.number,
+        "color": car.color
+    })
+    return car_json
 
 
 @router.delete("/{car_id}", description="Удаление автомобиля")

@@ -4,6 +4,8 @@ import os
 
 from dotenv import load_dotenv
 
+from yarl import URL
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
@@ -31,6 +33,14 @@ class Settings(BaseSettings):
     @property
     def db_url(self):
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+
+    @property
+    def redis_url(self):
+
+        return str(URL.build(
+            scheme="redis",
+            host=self.REDIS_HOST
+        ))
 
 
 settings = Settings()
