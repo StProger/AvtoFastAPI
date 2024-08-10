@@ -5,7 +5,7 @@
         "builtIn": 1,
         "datasource": {
           "type": "datasource",
-          "uid": "grafana"
+          "uid": "Prometheus"
         },
         "enable": true,
         "hide": true,
@@ -36,7 +36,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
-        "type": "prometheus",
+        "type": "Prometheus",
         "uid": "AxX7Lff4z"
       },
       "fill": 1,
