@@ -11,7 +11,7 @@ class Users(Base):
     login: Mapped[str] = mapped_column(nullable=False)
     hashed_password: Mapped[str] = mapped_column(nullable=False)
 
-    # booking = relationship("Bookings", back_populates="user")
+    car = relationship("Cars", back_populates="user")
 
     def __str__(self):
 

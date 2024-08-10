@@ -5,17 +5,19 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache import FastAPICache
-from fastapi_cache.decorator import cache
+from sqladmin import Admin
 
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from redis import asyncio as aioredis
 
-from app.db import delete_tables, create_tables
+from app.db import delete_tables, create_tables, engine
 from app.users.router import router as user_router
 from app.cars.router import router as car_router
 from app.prometheus.router import router as prometheus_router
 from app.config import settings
+from app.admin.auth import authentication_backend
+from app.admin.views import UserAdmin, CarAdmin
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -34,7 +36,6 @@ app.include_router(car_router)
 app.include_router(prometheus_router)
 
 origins = [
-    # 3000 - порт, на котором работает фронтенд на React.js
     "http://localhost:8000",
 ]
 
@@ -54,5 +55,11 @@ instrumentator = Instrumentator(
 )
 
 instrumentator.instrument(app).expose(app)
+
+
+admin = Admin(app, engine, authentication_backend=authentication_backend)
+
+admin.add_view(UserAdmin)
+admin.add_view(CarAdmin)
 
 

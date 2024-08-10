@@ -278,7 +278,7 @@
             "type": "prometheus",
             "uid": "AxX7Lff4z"
           },
-          "expr": "process_resident_memory_bytes{job=\"booking\"}",
+          "expr": "process_resident_memory_bytes{job=\"car_app\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -373,7 +373,7 @@
             "type": "prometheus",
             "uid": "AxX7Lff4z"
           },
-          "expr": "http_request_duration_seconds_sum{job=\"booking\",handler!=\"none\"} / http_request_duration_seconds_count",
+          "expr": "http_request_duration_seconds_sum{job=\"car_app\",handler!=\"none\"} / http_request_duration_seconds_count",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
