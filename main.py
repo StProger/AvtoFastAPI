@@ -13,6 +13,7 @@ from redis import asyncio as aioredis
 from app.db import delete_tables, create_tables
 from app.users.router import router as user_router
 from app.cars.router import router as car_router
+from app.prometheus.router import router as prometheus_router
 from app.config import settings
 
 @asynccontextmanager
@@ -29,6 +30,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(user_router)
 app.include_router(car_router)
+app.include_router(prometheus_router)
 
 # Подключаем эндпоинт для сбора метрик
 instrumentator = Instrumentator(
