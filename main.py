@@ -6,6 +6,8 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache import FastAPICache
 from fastapi_cache.decorator import cache
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from redis import asyncio as aioredis
 
 from app.db import delete_tables, create_tables
@@ -18,13 +20,22 @@ async def lifespan(app: FastAPI):
 
     await delete_tables()
     await create_tables()
-    redis = aioredis.from_url(settings.redis_url)
+    redis = aioredis.from_url(settings.redis_url, encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
 
     yield
-
 
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(user_router)
 app.include_router(car_router)
+
+# Подключаем эндпоинт для сбора метрик
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    excluded_handlers=[".*admin.*", "/metrics"]
+)
+
+instrumentator.instrument(app).expose(app)
+
+
