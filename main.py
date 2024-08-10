@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache import FastAPICache
@@ -31,6 +32,20 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(user_router)
 app.include_router(car_router)
 app.include_router(prometheus_router)
+
+origins = [
+    # 3000 - порт, на котором работает фронтенд на React.js
+    "http://localhost:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers",
+                   "Access-Control-Allow-Origin", "Authorization"],
+)
 
 # Подключаем эндпоинт для сбора метрик
 instrumentator = Instrumentator(
