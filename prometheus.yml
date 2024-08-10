@@ -10,7 +10,7 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['85.92.111.149:9090']
+      - targets: ['localhost:9100']
 
   - job_name: 'car_app'
 
