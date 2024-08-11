@@ -10,6 +10,10 @@ class AutoException(HTTPException):
 
         super().__init__(status_code=self.status_code, detail=self.detail)
 
+class InvalidPriceFilter(AutoException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Минимальная цена больше максимальной."
+
 
 class CarNotFound(AutoException):
 
