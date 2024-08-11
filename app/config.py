@@ -28,6 +28,8 @@ class Settings(BaseSettings):
     REDIS_HOST: str = os.getenv("REDIS_HOST")
     REDIS_PORT: str = os.getenv("REDIS_PORT")
 
+    PATH_LOGS: str = "app/data/logs.log"
+
     model_config = SettingsConfigDict(env_file='../.env')
 
     @property

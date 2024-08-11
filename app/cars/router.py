@@ -46,6 +46,7 @@ async def add_car(name: Annotated[str, Query(example="LADA", description=desc_na
 
 
 @router.get("", description="Получение машин")
+@cache(expire=15)
 async def get_cars(
         min_price: Annotated[int, Query(example=0, description="Минимальная цена", ge=0)] = None,
         max_price: Annotated[int, Query(example=100000, description="Максимальная цена", gt=0)] = None,

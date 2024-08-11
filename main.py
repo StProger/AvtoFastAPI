@@ -18,12 +18,14 @@ from app.prometheus.router import router as prometheus_router
 from app.config import settings
 from app.admin.auth import authentication_backend
 from app.admin.views import UserAdmin, CarAdmin
+from app.logging import setup
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
     await delete_tables()
     await create_tables()
+    await setup()
     redis = aioredis.from_url(settings.redis_url, encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
 
