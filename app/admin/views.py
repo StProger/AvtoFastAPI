@@ -26,3 +26,4 @@ class CarAdmin(ModelView, model=Cars):
 
     name = "Car"
     name_plural = "Cars"
+    icon = "fa-solid fa-car"
